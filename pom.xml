@@ -30,6 +30,31 @@
             </plugin>
             
             <plugin>
+                <groupId>com.google.code.maven-replacer-plugin</groupId>
+                <artifactId>replacer</artifactId>
+                <version>1.5.2</version>
+                <executions>
+                    <execution>
+                        <phase>prepare-package</phase>
+                        <goals>
+                            <goal>replace</goal>
+                        </goals>                    
+                    </execution>
+                </executions>
+                <configuration>
+                    <ignoreMissingFile>true</ignoreMissingFile>
+                    <file>src/main/bash/run-snow.sh</file>
+                    <outputFile>
+                        <!-- Put the file, with things replaced, in the JFX JAR directory  -->
+                        target/jfx/app/run-snow.sh
+                    </outputFile>
+                    <regex>false</regex>
+                    <token>$name$</token>
+                    <value>${project.build.finalName}</value>
+                </configuration>
+            </plugin>
+            
+            <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
                 <version>2.3.2</version>
