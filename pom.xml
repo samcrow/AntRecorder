@@ -4,7 +4,7 @@
 
     <groupId>org.samcrow</groupId>
     <artifactId>AntRecorder</artifactId>
-    <version>0.0.1</version>
+    <version>0.0.1beta2</version>
     <packaging>jar</packaging>
 
     <name>AntRecorder</name>
@@ -21,7 +21,7 @@
                 <artifactId>javafx-maven-plugin</artifactId>
                 <version>2.0</version>
                 <configuration>
-                    <mainClass>org.samcrow.frameviewer.App</mainClass>
+                    <mainClass>org.samcrow.antrecorder.App</mainClass>
                 </configuration>
             </plugin>
             
