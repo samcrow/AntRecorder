@@ -40,6 +40,11 @@ public class App extends Application {
     private Stage stage;
     
     private List<TimedEvent> events = new LinkedList<>();
+    
+    /**
+     * A label that provides status information
+     */
+    private Label statusLabel = new Label("Press start to begin");
 
     @Override
     public void start(Stage stage) throws Exception {
@@ -62,6 +67,7 @@ public class App extends Application {
                 @Override
                 public void handle(ActionEvent t) {
                     timer.start();
+                    statusLabel.setText("Started");
                 }
             });
             topBox.getChildren().add(playButton);
@@ -72,6 +78,7 @@ public class App extends Application {
                 @Override
                 public void handle(ActionEvent t) {
                     timer.pause();
+                    statusLabel.setText("Paused");
                 }
             });
             topBox.getChildren().add(pauseButton);
@@ -84,6 +91,7 @@ public class App extends Application {
                     timer.reset();
                     //Remove the recorded events
                     events.clear();
+                    statusLabel.setText("Events cleared");
                 }
             });
             topBox.getChildren().add(resetButton);
@@ -107,13 +115,18 @@ public class App extends Application {
             
             //Create buttons for the event types
             for(final Event type : Event.values()) {
-                final Button button = new Button(type.getHumanFriendlyName());
+                
+                String buttonText = type.getHumanFriendlyName();
+                if(type.getKey() != null) {
+                    buttonText += " ("+type.getKey().toString()+")";
+                }
+                
+                final Button button = new Button(buttonText);
                 
                 button.setOnAction(new EventHandler<ActionEvent>() {
                     @Override
                     public void handle(ActionEvent t) {
-                        TimedEvent event = new TimedEvent(timer.getTime(), type);
-                        events.add(event);
+                        recordEvent(type);
                     }
                 });
                 
@@ -123,10 +136,38 @@ public class App extends Application {
         }
         root.getChildren().add(bottomBox);
         
+        root.getChildren().add(statusLabel);
+        VBox.setMargin(statusLabel, MARGIN);
+        
         Scene scene = new Scene(root, root.getPrefWidth(), root.getPrefHeight());
+        
+        //Add accelerators for event keyboard shortcuts
+        for(final Event type : Event.values()) {
+            if(type.getKey() != null) {
+                scene.getAccelerators().put(type.getKey(), new Runnable() {
+
+                    @Override
+                    public void run() {
+                        recordEvent(type);
+                    }
+                });
+            }
+        }
+        
         stage.setScene(scene);
         stage.setTitle("Ant counter");
         stage.show();
+    }
+    
+    /**
+     * Records an event of the given type at the timer's current time
+     * @param type 
+     */
+    private void recordEvent(Event type) {
+        TimedEvent event = new TimedEvent(timer.getTime(), type);
+        events.add(event);
+        
+        statusLabel.setText(TimecodeLabel.formatTime(timer.getTime()) + ": Recorded " + type.getHumanFriendlyName());
     }
     
     private MenuBar createMenuBar() {
@@ -173,6 +214,7 @@ public class App extends Application {
                 out.println();
             }
             
+            statusLabel.setText("Saved file");
         }
         catch (IOException ex) {
             Logger.getLogger(App.class.getName()).log(Level.SEVERE, null, ex);

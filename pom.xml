@@ -4,11 +4,15 @@
 
     <groupId>org.samcrow</groupId>
     <artifactId>AntRecorder</artifactId>
-    <version>0.0.1beta2</version>
+    <version>0.0.2beta1</version>
     <packaging>jar</packaging>
 
     <name>AntRecorder</name>
-    <url>http://maven.apache.org</url>
+    <url>https://github.com/samcrow/AntRecorder</url>
+    
+    <organization>
+        <name>Sam Crow</name>
+    </organization>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
