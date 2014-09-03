@@ -35,7 +35,7 @@ import org.samcrow.antrecorder.TimedEvent.Event;
  */
 public class App extends Application {
     
-    private SecondTimer timer = new SecondTimer();
+    private SubSecondTimer timer = new SubSecondTimer();
     
     private Stage stage;
     
@@ -88,6 +88,7 @@ public class App extends Application {
             resetButton.setOnAction(new EventHandler<ActionEvent>() {
                 @Override
                 public void handle(ActionEvent t) {
+                    timer.pause();
                     timer.reset();
                     //Remove the recorded events
                     events.clear();
@@ -98,7 +99,12 @@ public class App extends Application {
             HBox.setMargin(resetButton, MARGIN);
             
             final TimecodeLabel timeLabel = new TimecodeLabel();
-            timeLabel.timeProperty().bind(timer.timeProperty());
+            timer.setTimeChangeListener(new SubSecondTimer.TimeChangeListener() {
+                @Override
+                public void onTimeChanged(double newTime) {
+                    timeLabel.setTime((int) newTime);
+                }
+            });
             topBox.getChildren().add(timeLabel);
             HBox.setMargin(timeLabel, MARGIN);
         }
@@ -167,7 +173,7 @@ public class App extends Application {
         TimedEvent event = new TimedEvent(timer.getTime(), type);
         events.add(event);
         
-        statusLabel.setText(TimecodeLabel.formatTime(timer.getTime()) + ": Recorded " + type.getHumanFriendlyName());
+        statusLabel.setText(TimecodeLabel.formatTime((int) timer.getTime()) + ": Recorded " + type.getHumanFriendlyName());
     }
     
     private MenuBar createMenuBar() {

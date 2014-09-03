@@ -4,7 +4,7 @@
 
     <groupId>org.samcrow</groupId>
     <artifactId>AntRecorder</artifactId>
-    <version>0.0.2beta1</version>
+    <version>0.0.3beta1</version>
     <packaging>jar</packaging>
 
     <name>AntRecorder</name>

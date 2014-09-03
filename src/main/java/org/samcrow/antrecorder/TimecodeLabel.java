@@ -48,7 +48,18 @@ public class TimecodeLabel extends Label {
         return String.format("%02d:%02d", minutes, seconds);
     }
     
+    static String formatTime(double seconds) {
+        final int SECONDS_PER_MINUTE = 60;
+        int minutes = ((int) seconds) / SECONDS_PER_MINUTE;
+        seconds -= SECONDS_PER_MINUTE * minutes;
+        return String.format("%02d:%02f", minutes, seconds);
+    }
+    
     public final IntegerProperty timeProperty() {
         return time;
+    }
+    
+    public final void setTime(int seconds) {
+        time.set(seconds);
     }
 }
